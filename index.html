@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+<script src="js/aframe.min.js"></script>
+<!-- include aframe-ar.js -->
+<script src="js/aframe-ar.js"></script>
+	    <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script> 
+<script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
+<script src="build/three.js"></script>
+<script src='build/three.min.js'></script>
+<script src='threex.objcoord-master/threex.objcoord.js'></script>
+<style type="text/css">
+	
+#arjsDebugUIContainer 
+{
+   display: none; !important;
+}
+	
+.a-enter-vr-button
+{
+   display: none; !important;
+	}	
+#button{
+	 position: fixed;
+  top: calc(70% - 1em);
+  left: calc(50% - 2em);
+  width: 8em;
+  height: 4em;
+	z-index:10;
+	}
+#scene{
+	z-index:0;
+	}
+}
+</style>
+  </head>
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+  <!--<button id="button" onclick="dosomething()">Clear</button>-->
+  <!-- <button onclick="clear2()">Clear2</button>-->
+  <script>
+  function clear() {
+    alert('clear');
+  }
+  function clear2() {
+    alert('clear2');
+  }
+  </script> 
+  
+  <!--<video controls
+    src="https://instagram.fmad7-1.fna.fbcdn.net/vp/8df35c8a81408c354f3f385d99bb55ea/5C2B0807/t50.2886-16/49682316_2053630514726334_789195232708132864_n.mp4?_nc_ht=instagram.fmad7-1.fna.fbcdn.net" type="video/mp4"
+    poster="https://instagram.fmad7-1.fna.fbcdn.net/vp/dbcd3714bea09773226546e0fbc56f17/5C2ADC82/t51.2885-15/e35/46552306_378004282983459_4023662717802556687_n.jpg?_nc_ht=instagram.fmad7-1.fna.fbcdn.net"
+    width="620">
+
+Sorry, your browser doesn't support embedded videos, 
+but don't worry, you can <a href="https://archive.org/details/BigBuckBunny_124">download it</a> 
+and watch it with your favorite video player!
+
+</video> -->
+	
+
+  
+  <a-scene id="scene" embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3;' cursor="rayOrigin: mouse" raycaster="objects: [data-clickable]" >
+    
+    <a-assets> 
+    <video id="video"  src="https://instagram.fmad7-1.fna.fbcdn.net/vp/8df35c8a81408c354f3f385d99bb55ea/5C2B0807/t50.2886-16/49682316_2053630514726334_789195232708132864_n.mp4?_nc_ht=instagram.fmad7-1.fna.fbcdn.net " 
+    <!-- webkit-playsinline  
+    crossOrigin="anonymous"-->
+    type="video/mp4"
+    poster="https://instagram.fmad7-1.fna.fbcdn.net/vp/dbcd3714bea09773226546e0fbc56f17/5C2ADC82/t51.2885-15/e35/46552306_378004282983459_4023662717802556687_n.jpg?_nc_ht=instagram.fmad7-1.fna.fbcdn.net"
+    <!-- autoplay="true"
+    loop="true"-->
+    controls ></video>
+	  <img id="play-image" src="btn-play_video.png" transparent="true">
+	 
+ 	</a-assets>
+	<a-marker id='marker' preset='custom' type='pattern' url='https://raw.githubusercontent.com/ToniNP95/AR_resources/master/pattern-marker.patt'>
+		<a-box color="green" scale=" 0.3 0.3 0.3" position="0 0 0" rotation="270 0 0"><a-text id="debugText" position="0 0 -0.4" value="Hello, World!"></a-text></a-box>
+	</a-marker>
+	
+	
+    <a-video id="vid" preload="true" src="#video" width="1.8" height="1" position="0 0 -1"  event-set__enter="_event: mouseenter; width: 1.8; height: 1;"
+            event-set__leave="_event: mouseleave;  width: 1.8; height: 1;">
+	    <a-image id="play" src="#play-image" width="0.4" height="0.4" position="0 0 0.1" transparent="true" material="alphaTest: 0.5" data-clickable visible="true" onclick="dosomething()"></a-image>
+
+	</a-video>
+    <!--<a-entity camera look-controls>-->
+<a-entity camera>
+	    <!--<a-cursor></a-cursor> 
+  	    <a-entity id="debugBox" geometry="primitive: plane; height: 0.2; width: 0.2" position="0 0 -1"
+            material="color: green; opacity: 0.5"></a-entity>-->
+</a-entity>
+	<!--<a-camera  look-controls-enabled="false" ></a-camera>-->
+</a-scene>
+<script>
+
+	var scene=document.getElementById("scene");
+	var video=document.getElementById("vid");
+	var play=document.getElementById("play");
+	var mark=document.getElementById("marker");
+	var i=0;
+	
+
+function bucle() {
+  requestAnimationFrame( bucle );
+  //alert("bucle");
+}
+bucle();
+ //var scene = document.querySelector('a-scene');
+
+scene.onload=run();
+
+function run () {
+  requestAnimationFrame( run );
+  //var entity = document.getElementById('debugBox');
+        /*var position=mark.getAttribute('position');
+	//alert("actualizando pos");
+	video.setAttribute('position',position);*/
+	//scene.object3D.updateMatrixWorld();
+	var position	= THREEx.ObjCoord.worldPosition(mark.object3D);
+	video.setAttribute('position',position);
+	
+	
+	 if(document.getElementById("video").paused)
+ {	 
+	play.setAttribute("visible","true");
+ }
+  //video.setAttribute('position', {x: 0, y: i, z: -1});
+  //	i+=0.04;
+  //entity.setAttribute('material', 'color', 'blue');
+  //alert("running");
+}
+
+	
+   function dosomething(){
+	play.setAttribute("visible","false");
+	//document.getElementById("vid").play();
+	document.getElementById("video").play();
+	   
+	//alert("patata"); 
+   }
+  /*document.getElementById("vid").addEventListener("mouseenter",function(){
+	  dosomething();
+  },false);*/
+</script>
+</body>
+</html>
